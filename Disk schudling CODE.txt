@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+void SCAN(int arr[], int head, int size, int direction) 
+{
+    int seek_count = 0;
+    int distance, cur_track;
+
+    int temp[size + 1];
+    for (int i = 0; i < size; i++)
+        temp[i] = arr[i];
+
+    temp[size] = head;
+
+    // Sorting the tracks array
+    for (int i = 0; i <= size; i++) {
+        for (int j = i + 1; j <= size; j++) {
+            if (temp[i] > temp[j]) {
+                int temp_var = temp[i];
+                temp[i] = temp[j];
+                temp[j] = temp_var;
+            }
+        }
+    }
+
+    int cur_pos;
+    for (int i = 0; i <= size; i++) {
+        if (head == temp[i]) {
+            cur_pos = i;
+            break;
+        }
+    }
+
+    if (direction == 0) { // Towards the right
+        for (int i = cur_pos; i <= size; i++) {
+            cur_track = temp[i];
+            printf("Seeked track %d\n", cur_track);
+            distance = abs(cur_track - head);
+            seek_count += distance;
+            head = cur_track;
+        }
+        seek_count += abs(head - temp[cur_pos - 1]);
+        printf("Seeked track %d\n", temp[cur_pos - 1]);
+        for (int i = cur_pos - 1; i >= 0; i--) {
+            cur_track = temp[i];
+            printf("Seeked track %d\n", cur_track);
+            distance = abs(cur_track - head);
+            seek_count += distance;
+            head = cur_track;
+        }
+    } 
+     else if (direction == 1) { // Towards the left
+        for (int i = cur_pos; i >= 0; i--) {
+            cur_track = temp[i];
+            printf("Seeked track %d\n", cur_track);
+            distance = abs(cur_track - head);
+            seek_count += distance;
+            head = cur_track;
+        }
+        seek_count += abs(head - temp[cur_pos + 1]);
+        printf("Seeked track %d\n", temp[cur_pos + 1]);
+        for (int i = cur_pos + 1; i <= size; i++) {
+            cur_track = temp[i];
+            printf("Seeked track %d\n", cur_track);
+            distance = abs(cur_track - head);
+            seek_count += distance;
+            head = cur_track;
+        }
+    }
+
+    printf("Total seek time: %d\n", seek_count);
+}
+
+int main() {
+    int size, head, direction;
+    printf("Enter the number of tracks: ");
+    scanf("%d", &size);
+
+    int tracks[size];
+    printf("Enter the track positions: ");
+    for (int i = 0; i < size; i++)
+        scanf("%d", &tracks[i]);
+
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    printf("Enter the direction (0 - Towards right, 1 - Towards left): ");
+    scanf("%d", &direction);
+
+    SCAN(tracks, head, size, direction);
+
+    return 0;
+}
